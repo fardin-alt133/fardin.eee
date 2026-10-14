@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EEE Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+  /* ============ NEUMORPHIC DESIGN TOKENS (edit to re-theme) ============ */
+  :root{
+    --bg:#1e1e24; --text:#e6e8ee; --muted:#8e93a3;
+    --cyan:#00f0ff; --green:#00ff9d;
+    --hi:rgba(255,255,255,.06);   /* top-left light */
+    --lo:rgba(0,0,0,.65);         /* bottom-right shadow */
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Poppins',system-ui,sans-serif}
+  /* Raised surface */
+  .neu{background:var(--bg);border-radius:1.5rem;box-shadow:-8px -8px 16px var(--hi),8px 8px 16px var(--lo)}
+  .neu-sm{background:var(--bg);border-radius:1rem;box-shadow:-4px -4px 8px var(--hi),4px 4px 8px var(--lo)}
+  /* Pressed / inset surface */
+  .neu-in{background:var(--bg);border-radius:1rem;box-shadow:inset -4px -4px 8px var(--hi),inset 4px 4px 8px var(--lo)}
+  /* Interactive button: raised -> pressed */
+  .neu-btn{background:var(--bg);border-radius:9999px;box-shadow:-5px -5px 10px var(--hi),5px 5px 10px var(--lo);
+    transition:box-shadow .15s,color .15s,transform .15s;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem}
+  .neu-btn:hover{color:var(--cyan)}
+  .neu-btn:active,.neu-btn.is-active{box-shadow:inset -4px -4px 8px var(--hi),inset 4px 4px 8px var(--lo);color:var(--green);transform:scale(.98)}
+  .neu-icon{width:3rem;height:3rem;border-radius:9999px}
+  .neu-field{background:var(--bg);border:0;border-radius:1rem;width:100%;padding:.9rem 1.1rem;color:var(--text);outline:none;
+    box-shadow:inset -4px -4px 8px var(--hi),inset 4px 4px 8px var(--lo);transition:box-shadow .2s}
+  .neu-field:focus{box-shadow:inset -4px -4px 8px var(--hi),inset 4px 4px 8px var(--lo),0 0 0 2px var(--cyan)}
+  .accent{color:var(--cyan)}
+  .grad-text{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .bar-fill{background:linear-gradient(90deg,var(--cyan),var(--green));box-shadow:0 0 10px rgba(0,240,255,.45)}
+  .tag{background:var(--bg);border-radius:9999px;padding:.2rem .75rem;font-size:.72rem;color:var(--green);
+    box-shadow:inset -2px -2px 4px var(--hi),inset 2px 2px 4px var(--lo)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+  /* Timeline */
+  .tl-line{position:absolute;left:1.1rem;top:0;bottom:0;width:6px;border-radius:9999px;
+    background:var(--bg);box-shadow:inset -2px -2px 3px var(--hi),inset 2px 2px 3px var(--lo)}
+  .tl-dot{position:absolute;left:.65rem;top:1.6rem;width:1.5rem;height:1.5rem;border-radius:9999px;background:var(--bg);
+    box-shadow:-3px -3px 6px var(--hi),3px 3px 6px var(--lo);display:grid;place-items:center}
+  .tl-dot::after{content:"";width:.5rem;height:.5rem;border-radius:9999px;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body class="antialiased">
+
+<!-- NAV -->
+<header class="fixed top-0 inset-x-0 z-40 px-4 pt-4">
+  <nav class="neu max-w-6xl mx-auto flex items-center justify-between px-5 py-3">
+    <a href="#home" id="navBrand" class="font-semibold grad-text text-lg"></a>
+    <ul id="navLinks" class="hidden md:flex gap-2 text-sm"></ul>
+    <button id="menuBtn" class="neu-btn neu-icon md:hidden" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
+    </button>
+  </nav>
+  <ul id="mobileLinks" class="neu max-w-6xl mx-auto mt-3 hidden flex-col p-3 gap-1 text-sm md:hidden"></ul>
+</header>
+
+<main class="max-w-6xl mx-auto px-5 sm:px-8">
+
+  <!-- HERO -->
+  <section id="home" class="min-h-screen flex items-center pt-28 pb-16">
+    <div class="grid lg:grid-cols-5 gap-12 items-center w-full">
+      <div class="lg:col-span-3 order-2 lg:order-1 text-center lg:text-left">
+        <p class="text-muted text-sm mb-3" style="color:var(--muted)">Hello, I'm</p>
+        <h1 id="heroName" class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight"></h1>
+        <p id="heroTagline" class="mt-4 text-xl sm:text-2xl font-medium grad-text"></p>
+        <p id="heroBio" class="mt-5 max-w-xl mx-auto lg:mx-0 leading-relaxed" style="color:var(--muted)"></p>
+        <div class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
+          <a href="#projects" class="neu-btn px-7 py-3 font-medium accent">View Projects</a>
+          <a id="resumeBtn" href="#" class="neu-btn px-7 py-3 font-medium">Download Resume</a>
+        </div>
+        <div id="heroSocials" class="mt-8 flex gap-4 justify-center lg:justify-start"></div>
+      </div>
+      <div class="lg:col-span-2 order-1 lg:order-2 flex justify-center">
+        <!-- Neumorphic avatar frame: outer raised ring + inner inset well -->
+        <div class="neu rounded-full p-5 relative" style="border-radius:9999px">
+          <div class="neu-in overflow-hidden grid place-items-center w-56 h-56 sm:w-72 sm:h-72" style="border-radius:9999px;box-shadow:inset -4px -4px 8px var(--hi),inset 4px 4px 8px var(--lo),0 0 0 2px rgba(0,240,255,.28),0 0 30px rgba(0,240,255,.14)">
+            <img id="avatarImg" alt="Profile photo" class="w-full h-full object-cover hidden">
+            <svg id="avatarInit" viewBox="0 0 100 100" class="w-full h-full" aria-hidden="true">
+              <defs>
+                <linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#00ff9d"/></linearGradient>
+                <radialGradient id="ab" cx=".5" cy=".4" r=".75"><stop offset="0" stop-color="#2b2d38"/><stop offset="1" stop-color="#1e1e24"/></radialGradient>
+              </defs>
+              <rect width="100" height="100" fill="url(#ab)"/>
+              <g fill="none" stroke="url(#ag)" stroke-width=".6" opacity=".4" stroke-linecap="round">
+                <path d="M0 20h20l6 6h14M100 30H82l-6 6h-8M0 80h16l6-6h14M100 84H86l-6-6h-8"/>
+                <circle cx="40" cy="26" r="1.3"/><circle cx="68" cy="36" r="1.3"/><circle cx="36" cy="74" r="1.3"/><circle cx="72" cy="78" r="1.3"/>
+              </g>
+              <g fill="url(#ag)" style="filter:drop-shadow(0 0 5px rgba(0,240,255,.45))">
+                <circle cx="50" cy="40" r="15" opacity=".92"/>
+                <path d="M20 96c0-18 13-29 30-29s30 11 30 29z" opacity=".92"/>
+              </g>
+            </svg>
+          </div>
+          <span class="neu-sm absolute top-3 right-0 w-12 h-12 grid place-items-center accent" style="border-radius:9999px" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>
+          </span>
+          <span class="neu-sm absolute bottom-4 left-0 w-12 h-12 grid place-items-center" style="border-radius:9999px;color:var(--green)" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">About Me</h2>
+    <div class="grid lg:grid-cols-2 gap-8">
+      <div class="neu p-7">
+        <p id="aboutText" class="leading-relaxed" style="color:var(--muted)"></p>
+        <h3 class="mt-6 mb-3 font-medium">Research interests</h3>
+        <div id="interests" class="flex flex-wrap gap-2"></div>
+      </div>
+      <div id="infoGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">Skills &amp; Tools</h2>
+    <div id="skillGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">Featured Projects</h2>
+    <div id="projectGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="education" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">Education</h2>
+    <div id="eduTimeline" class="relative max-w-3xl mx-auto"></div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">Achievements</h2>
+    <div id="achTimeline" class="relative max-w-3xl mx-auto"></div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-20">
+    <h2 class="text-3xl font-semibold mb-10 text-center">Contact Me</h2>
+    <div class="grid gap-8">
+      <div id="contactInfo" class="max-w-xl mx-auto w-full flex flex-col gap-5"></div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-5 text-sm" style="color:var(--muted)">
+  <p id="copyright"></p>
+  <button id="toTop" class="neu-btn neu-icon" aria-label="Back to top">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15V4M4 9l5-5 5 5"/></svg>
+  </button>
+</footer>
+
+<script>
+/* =====================================================================
+   1. CONFIGURATION — edit ONLY this object to personalise the site.
+   Add / remove items in any array; the layout updates automatically.
+   ===================================================================== */
+const CONFIG = {
+  name: "Your Name",
+  brand: "YN.eee",
+  tagline: "EEE Undergraduate & Tech Enthusiast",
+  bio: "I design circuits, program microcontrollers and turn ideas into working hardware. Currently exploring where embedded systems meet machine learning.",
+  avatar: "",                       // image URL or "photo.jpg"; leave "" to show initials
+  resumeUrl: "#",                   // path to your PDF, e.g. "resume.pdf"
+  socials: [                        // icon: github | linkedin | mail | twitter | link
+    { label: "GitHub",   icon: "github",   url: "https://github.com/your-username" },
+    { label: "LinkedIn", icon: "linkedin", url: "https://linkedin.com/in/your-username" },
+    { label: "Email",    icon: "mail",     url: "mailto:you@example.com" }
+  ],
+  about: {
+    text: "I'm an Electrical and Electronic Engineering undergraduate driven by the idea that good engineering is both rigorous and creative. I enjoy taking a problem from a schematic to a PCB to firmware, and I'm especially curious about low-power sensing and edge intelligence.",
+    interests: ["Embedded Systems", "Circuit Design", "ML / AI", "IoT", "Robotics"],
+    info: [
+      { label: "University", value: "Your University Name", icon: "🎓" },
+      { label: "Department", value: "Electrical & Electronic Engineering", icon: "⚡" },
+      { label: "Academic Year", value: "3rd Year, 2nd Semester", icon: "📅" },
+      { label: "Location", value: "Chattogram, Bangladesh", icon: "📍" }
+    ]
+  },
+  skills: [                         // level: 0–100
+    { category: "Hardware & Microcontrollers", icon: "🔌", items: [
+      { name: "Arduino", level: 90 }, { name: "ESP32", level: 85 },
+      { name: "Proteus", level: 80 }, { name: "Circuit Design", level: 82 } ] },
+    { category: "Software & Programming", icon: "💻", items: [
+      { name: "C / C++", level: 88 }, { name: "Python", level: 80 },
+      { name: "MATLAB / R", level: 75 } ] },
+    { category: "Tools & Frameworks", icon: "🛠️", items: [
+      { name: "VS Code", level: 90 }, { name: "Git", level: 78 },
+      { name: "CST Studio / Ansys", level: 60 }, { name: "Multisim", level: 80 } ] }
+  ],
+  projects: [
+    { title: "ESP32-CAM Smart Monitor", image: "",
+      desc: "Wi-Fi camera and sensor node that streams video and logs temperature and motion events to a dashboard.",
+      tags: ["ESP32-CAM", "C++", "MQTT", "IoT"], github: "#", demo: "#" },
+    { title: "Active Filter Simulation", image: "",
+      desc: "Design and frequency-response analysis of Butterworth active filters, verified against hand calculations.",
+      tags: ["Proteus", "Multisim", "MATLAB"], github: "#", demo: "#" },
+    { title: "Fault Classifier (ML)", image: "",
+      desc: "Python app that classifies motor vibration data into healthy and faulty states with a lightweight model.",
+      tags: ["Python", "scikit-learn", "Flask"], github: "#", demo: "#" }
+  ],
+  education: [                      // newest first
+    { period: "Present", title: "B.Sc. in Electrical & Electronic Engineering", place: "Your University Name",
+      note: "Currently in 3rd year, 2nd semester. CGPA: 3.xx / 4.00" },
+    { period: "2022", title: "Higher Secondary Certificate", place: "Your College", note: "GPA 5.00" }
+  ],
+  achievements: [                   // hackathons, clubs, research, publications
+    { period: "2026", title: "Hackathon Finalist", place: "National Tech Fest",
+      note: "Built an IoT energy-monitoring prototype in 24 hours." },
+    { period: "2025", title: "Robotics Club — Hardware Lead", place: "University Robotics Club",
+      note: "Led a team of 6 building a line-following robot." },
+    { period: "2025", title: "Research Assistant (add your publication)", place: "Your Lab / Supervisor",
+      note: "Worked on low-power sensor data acquisition." }
+  ],
+  contact: { email: "you@example.com", phone: "+880 1XXX-XXXXXX", location: "Chattogram, Bangladesh",
+             formAction: "" }       // optional: a Formspree/Getform URL; "" falls back to mailto
+};
+
+/* =====================================================================
+   2. RENDERING (no need to edit below unless changing behaviour)
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const ICONS = {
+  github:'<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
+  linkedin:'<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  twitter:'<path d="M4 4l16 16M20 4 4 20"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/>'
+};
+const svg = (n, s=20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||ICONS.link}</svg>`;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  const C = CONFIG;
+  document.title = `${C.name} | EEE Portfolio`;
+  $('#navBrand').textContent = C.brand;
+  $('#heroName').textContent = C.name;
+  $('#heroTagline').textContent = C.tagline;
+  $('#heroBio').textContent = C.bio;
+  $('#resumeBtn').href = C.resumeUrl;
+  if (C.resumeUrl && C.resumeUrl !== '#') $('#resumeBtn').setAttribute('download','');
+  $('#copyright').textContent = `© ${new Date().getFullYear()} ${C.name}. All rights reserved.`;
+
+  // Avatar
+  if (C.avatar){ const i=$('#avatarImg'); i.src=C.avatar; i.classList.remove('hidden'); $('#avatarInit').classList.add('hidden'); }
+  
+
+  // Nav
+  const links = [['About','#about'],['Skills','#skills'],['Projects','#projects'],['Education','#education'],['Achievements','#achievements'],['Contact','#contact']];
+  $('#navLinks').innerHTML = links.map(([t,h])=>`<li><a href="${h}" class="neu-btn px-3 py-2">${t}</a></li>`).join('');
+  $('#mobileLinks').innerHTML = links.map(([t,h])=>`<li><a href="${h}" class="neu-btn w-full px-4 py-3">${t}</a></li>`).join('');
+
+  // Socials
+  $('#heroSocials').innerHTML = C.socials.map(s=>
+    `<a href="${esc(s.url)}" target="_blank" rel="noopener" class="neu-btn neu-icon" aria-label="${esc(s.label)}">${svg(s.icon)}</a>`).join('');
+
+  // About
+  $('#aboutText').textContent = C.about.text;
+  $('#interests').innerHTML = C.about.interests.map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+  $('#infoGrid').innerHTML = C.about.info.map(i=>`
+    <div class="neu-sm p-5 flex flex-col gap-2">
+      <span class="text-2xl" aria-hidden="true">${i.icon||''}</span>
+      <span class="text-xs" style="color:var(--muted)">${esc(i.label)}</span>
+      <span class="font-medium">${esc(i.value)}</span>
+    </div>`).join('');
+
+  // Skills: inset track + glowing fill
+  $('#skillGrid').innerHTML = C.skills.map(g=>`
+    <article class="neu p-7">
+      <h3 class="font-semibold mb-5 flex items-center gap-3"><span class="neu-in w-10 h-10 grid place-items-center" aria-hidden="true">${g.icon||''}</span>${esc(g.category)}</h3>
+      <div class="grid gap-4">${g.items.map(s=>`
+        <div>
+          <div class="text-sm flex items-center gap-3"><span class="w-2 h-2 rounded-full shrink-0" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></span><span>${esc(s.name)}</span></div>
+        </div>`).join('')}</div>
+    </article>`).join('');
+
+  // Projects
+  $('#projectGrid').innerHTML = C.projects.map(p=>`
+    <article class="neu p-5 flex flex-col">
+      <div class="neu-in h-40 mb-5 overflow-hidden grid place-items-center">
+        ${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.title)}" class="w-full h-full object-cover">`
+                  : `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>`}
+      </div>
+      <h3 class="font-semibold text-lg">${esc(p.title)}</h3>
+      <p class="text-sm mt-2 leading-relaxed flex-1" style="color:var(--muted)">${esc(p.desc)}</p>
+      <div class="flex flex-wrap gap-2 mt-4">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+      <div class="flex gap-3 mt-5">
+        <a href="${esc(p.github)}" target="_blank" rel="noopener" class="neu-btn flex-1 py-2.5 text-sm">${svg('github',16)} GitHub Repo</a>
+        <a href="${esc(p.demo)}" target="_blank" rel="noopener" class="neu-btn flex-1 py-2.5 text-sm accent">Live Demo</a>
+      </div>
+    </article>`).join('');
+
+  // Timeline
+  const tl = list => '<div class="tl-line" aria-hidden="true"></div>' + list.map(t=>`
+    <div class="relative pl-14 pb-8 last:pb-0">
+      <span class="tl-dot" aria-hidden="true"></span>
+      <div class="neu-sm p-5">
+        <span class="tag">${esc(t.period)}</span>
+        <h3 class="font-semibold mt-3">${esc(t.title)}</h3>
+        <p class="text-sm accent">${esc(t.place)}</p>
+        <p class="text-sm mt-2" style="color:var(--muted)">${esc(t.note)}</p>
+      </div>
+    </div>`).join('');
+  $('#eduTimeline').innerHTML = tl(C.education);
+  $('#achTimeline').innerHTML = tl(C.achievements);
+
+  // Contact info
+  const c = C.contact;
+  const row = (icon,label,val,href) => `
+    <a ${href?`href="${href}"`:''} class="neu p-5 flex items-center gap-4">
+      <span class="neu-in w-12 h-12 grid place-items-center accent shrink-0">${icon}</span>
+      <span class="min-w-0"><span class="block text-xs" style="color:var(--muted)">${label}</span><span class="block font-medium break-words">${esc(val)}</span></span>
+    </a>`;
+  $('#contactInfo').innerHTML =
+    row(svg('mail'),'Email',c.email,`mailto:${esc(c.email)}`) +
+    row('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>','Phone',c.phone,`tel:${esc(c.phone.replace(/\s/g,''))}`) +
+    row('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>','Location',c.location);
+
+  // Animate skill bars once when visible
+  const io = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.querySelectorAll('[data-w]').forEach(b=>b.style.width=b.dataset.w+'%'); io.unobserve(e.target); }
+  }),{threshold:.2});
+  io.observe($('#skillGrid'));
+}
+
+/* =====================================================================
+   3. INTERACTIONS
+   ===================================================================== */
+function wire(){
+  // Mobile menu
+  const menu = $('#mobileLinks'), btn = $('#menuBtn');
+  btn.onclick = () => { const open = menu.classList.toggle('hidden'); menu.classList.toggle('flex', !open);
+    btn.classList.toggle('is-active', !open); btn.setAttribute('aria-expanded', String(!open)); };
+  menu.addEventListener('click', e => { if(e.target.closest('a')){ menu.classList.add('hidden'); menu.classList.remove('flex'); btn.classList.remove('is-active'); btn.setAttribute('aria-expanded','false'); }});
+
+  // Back to top
+  $('#toTop').onclick = () => window.scrollTo({top:0});
+
+  // Contact form: POST to formAction if set, otherwise open the mail app
+  const sendBtn = $('#sendBtn'); if (!sendBtn) return;   // contact form removed
+  sendBtn.onclick = async () => {
+    const st = $('#formStatus'), v = id => $(id).value.trim();
+    const d = { name:v('#fName'), email:v('#fEmail'), subject:v('#fSubject'), message:v('#fMsg') };
+    if(!d.name || !/^\S+@\S+\.\S+$/.test(d.email) || !d.message){
+      st.style.color='#ff6b81'; st.textContent='Enter your name, a valid email and a message.'; return; }
+    if(CONFIG.contact.formAction){
+      try{
+        const r = await fetch(CONFIG.contact.formAction,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(d)});
+        if(!r.ok) throw 0;
+        st.style.color='var(--green)'; st.textContent='Message sent. I will reply soon.';
+        ['#fName','#fEmail','#fSubject','#fMsg'].forEach(i=>$(i).value='');
+      }catch{ st.style.color='#ff6b81'; st.textContent='Could not send. Email me directly instead.'; }
+    } else {
+      const body = encodeURIComponent(`${d.message}\n\n— ${d.name} (${d.email})`);
+      location.href = `mailto:${CONFIG.contact.email}?subject=${encodeURIComponent(d.subject||'Portfolio enquiry')}&body=${body}`;
+      st.style.color='var(--green)'; st.textContent='Opening your email app…';
+    }
+  };
+}
+render(); wire();
+</script>
+</body>
+</html>
